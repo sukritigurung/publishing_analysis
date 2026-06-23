@@ -1,5 +1,7 @@
 /*
-Creating the table in the database. I usually use VARCHAR(255) for text fields as that is how I learned to do it. However, there were a couple of records in the book_name and author_name fields that were way too long to fit the VARCHAR(255) specifications. Therefore, I decided to use TEXT for all the string fields for consistency.
+Creating the table in the database. I usually use VARCHAR(255) for text fields as that is how I learned to do it. 
+However, there were a couple of records in the book_name and author_name fields that were way too long to fit the VARCHAR(255) specifications. 
+Therefore, I decided to use TEXT for all the string fields for consistency.
 */
 CREATE TABLE books_data_clean (
 	index_number BIGINT -- primary key
