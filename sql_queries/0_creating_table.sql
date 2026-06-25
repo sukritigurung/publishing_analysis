@@ -21,3 +21,53 @@ CREATE TABLE books_data_clean (
 	, units_sold INT
 )
 ;
+
+SELECT -- double-checking that I hadn't misremembered seeing two different "fiction" values
+	book_genre
+	, COUNT(*) AS book_count
+FROM 
+	books_data_clean
+GROUP BY
+	book_genre
+ORDER BY book_count DESC
+;
+
+SELECT -- doing the same for publisher
+	publisher_name
+	, COUNT(*) AS publisher_count
+FROM
+	books_data_clean
+GROUP BY
+	publisher_name
+ORDER BY publisher_count DESC
+;
+
+/*
+Creating a view for the standardized genre and publisher columns. Originally used CTEs but had to use over multiple queries.
+*/
+CREATE VIEW books_data_view AS
+	SELECT
+		index_number
+		, ABS(publishing_year) AS publication_year_bce_ce -- coding as absolute value
+		, book_name
+		, author_name
+		, CASE
+			WHEN LOWER(book_genre) IN ('fiction','genre fiction')
+				THEN 'fiction'
+			ELSE book_genre
+		  END AS view_book_genre
+		, book_average_rating
+		, book_ratings_count
+		, sale_price
+		, units_sold
+		, gross_sales
+		, sales_rank
+		, CASE
+			WHEN LOWER(publisher_name) ILIKE 'harpercollins%'
+				THEN 'HarperCollins Publishers'
+			ELSE publisher_name
+		  END AS view_publisher_name
+		, publisher_revenue
+	FROM
+		books_data_clean
+;

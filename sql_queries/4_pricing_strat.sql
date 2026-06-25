@@ -1,30 +1,3 @@
-WITH books_data_cte AS ( -- creating the cte 
-    SELECT
-        index_number
-        , ABS(publishing_year) AS publication_year_bce_ce
-        , book_name
-        , author_name
-        , CASE WHEN
-            LOWER(book_genre) IN ('fiction','genre fiction') -- 884
-                THEN 'fiction'
-            ELSE book_genre
-          END AS cte_book_genre
-        , book_average_rating
-        , book_ratings_count
-        , sale_price
-        , units_sold
-        , gross_sales
-        , sales_rank
-        , CASE WHEN
-            LOWER(publisher_name) ILIKE 'harpercollins%' -- 79
-                THEN 'HarperCollins Publishers'
-            ELSE publisher_name
-          END AS cte_publisher_name
-        , publisher_revenue
-    FROM
-        books_data_clean
-)
-
 /*
 Do higher priced books generate more revenue?
 "price_range","number_of_books","total_publisher_revenue","avg_revenue_per_book"
@@ -47,7 +20,7 @@ SELECT
     , ROUND(SUM(publisher_revenue),2) AS total_publisher_revenue
     , ROUND(AVG(publisher_revenue),2) AS avg_revenue_per_book
 FROM
-    books_data_cte
+    books_data_view
 GROUP BY
     price_range
 ORDER BY
@@ -75,7 +48,7 @@ SELECT
 	, ROUND(AVG(units_sold),0) AS avg_units_sold
 	, ROUND(AVG(sale_price),2) AS avg_price
 FROM
-	books_data_cte
+	books_data_view
 GROUP BY
 	price_range
 ORDER BY
@@ -84,7 +57,7 @@ ORDER BY
 
 /*
 Are publishers generating more revenue through higher prices or higher sales volume?
-"cte_publisher_name","number_of_titles","avg_sale_price","avg_units_sold","avg_revenue_per_book"
+"view_publisher_name","number_of_titles","avg_sale_price","avg_units_sold","avg_revenue_per_book"
 "Hachette Book Group","66","6.36","8240","2089.01"
 "Penguin Group (USA) LLC","108","8.65","8651","1979.79"
 "HarperCollins Publishers","79","6.20","8219","1689.17"
@@ -94,15 +67,15 @@ Are publishers generating more revenue through higher prices or higher sales vol
 "Amazon Digital Services,  Inc.","600","3.23","10124","247.07"
 */
 SELECT
-    cte_publisher_name
+    view_publisher_name
     , COUNT(*) AS number_of_titles
     , ROUND(AVG(sale_price),2) AS avg_sale_price
     , ROUND(AVG(units_sold),0) AS avg_units_sold
     , ROUND(AVG(publisher_revenue),2) AS avg_revenue_per_book
 FROM
-    books_data_cte
+    books_data_view
 GROUP BY
-    cte_publisher_name
+    view_publisher_name
 ORDER BY
     avg_revenue_per_book DESC
 ;
