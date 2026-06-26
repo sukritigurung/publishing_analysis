@@ -1,7 +1,9 @@
 # Background
 Honeybee Group is an investment firm looking to invest in the publishing industry. The company is seeking to better understand what publisher would yield the best returns based on commercial performance and customer satisfaction.
 
-The SQL queries used for this analysis can be found [here](/sql_queries/) (sql_queries folder).
+The SQL queries used for this analysis along with detailed comments and result sets can be found [here](/sql_queries/).
+
+You can find a visualized summary of the analysis [here](/dashboard_images/Publishing%20Analysis%20Dashboard%20Image.png).
 ### Questions to Consider
 Insights and recommendations are provided on the following key areas:
 - **Commercial performance:** An analysis of which publishers are generating the strongest commercial results.
@@ -13,10 +15,11 @@ Insights and recommendations are provided on the following key areas:
 - **Pricing strategy:** An analysis of what commercial strategies can be most effective.
     - Do higher priced books generate more revenue? Do higher priced books sell more copies? Are publishers generating more revenue through higher prices or higher sales volume?
 ### Tools Used
-The programs I made the most use out of for this project are:
+The tools I used for this project are:
 - SQL
 - PostgreSQL
 - Visual Studio Code
+- Tableau
 - Git and GitHub
 # Data Structure and Initial Checks
 This project was conducted using Josh Murrey's Book Sales and Ratings Data from Kaggle which can be found [here](https://www.kaggle.com/datasets/thedevastator/books-sales-and-ratings/data).
@@ -40,20 +43,63 @@ Prior to analysis, I cleaned up the data by renaming several fields using snake 
 - Publisher > publisher_name TEXT
 - units sold > units_sold INT
 
+For the analysis, I used a view that standardized the book_genre, publishing_year, and publisher_name fields (detailed explanation for why in the [assumptions and caveats](#assumptions-and-caveats) section). Code used to create view:
+```SQL
+CREATE VIEW books_data_view AS
+	SELECT
+		index_number
+		, ABS(publishing_year) AS publication_year_bce_ce
+		, book_name
+		, author_name
+		, CASE
+			WHEN LOWER(book_genre) IN ('fiction','genre fiction')
+				THEN 'fiction'
+			ELSE book_genre
+		  END AS view_book_genre
+		, book_average_rating
+		, book_ratings_count
+		, sale_price
+		, units_sold
+		, gross_sales
+		, sales_rank
+		, CASE
+			WHEN LOWER(publisher_name) ILIKE 'harpercollins%'
+				THEN 'HarperCollins Publishers'
+			ELSE publisher_name
+		  END AS view_publisher_name
+		, publisher_revenue
+	FROM
+		books_data_clean
+;
+```
 # Executive Summary
+<p align="center">
+    <img src="dashboard_images\overview_summary.png"/>
+</p>
+<p align="center">
+  <i>Overview of main metrics.</i>
+</p>
 After evaluating the data, Honeybee Group found Penguin Group (USA) LLC to be both the highest-revenue publisher and one of the strongest performers in reader ratings. Revenue appears heavily concentrated among a relatively small percentage of bestselling titles. While higher-priced books generally generated more revenue per title, sales volume remains critical in publisher success.
 ### Overview of Findings
 #### Commercial Performance
 - Penguin Group (USA) LLC generated the highest total revenue, producing $213,817.45 in publisher revenue.
 - Hachette Book Group generated the highest average publisher revenue per title at $2,089.01 across 66 books.
-    - While Hachette generated less total revenue than Penguin, its catalog appears to monetize better per title which may indicate stronger title selection, marketing effectiveness, or pricing strategy.
+    - While Hachette generated less total revenue than Penguin, the higher average revenue per title may indicate stronger title selection, marketing effectiveness, or pricing strategy.
 - Amazon Digital Services, Inc. sold the most units with 6,074,136 copies.
     - The second best-selling publisher was Random House LLC with 1,315,958 copies.
     - With such a large distance between the two best-selling publishers, this suggests that Amazon focuses more on a large catalog rather than maximizing revenue from individual releases.
-- Books published in 2011 generated the highest publisher revenue ($71,986.69) while books published in 2012 sold the most units (769,084).
+
+<p align="center">
+    <img src="dashboard_images\perf_over_years.png"/>
+</p>
+<p align="center">
+  <i>Visualization of publishing performance over the years.</i>
+</p>
+
+- As seen in the chart above, books published in 2011 generated the highest publisher revenue ($71,986.69) while books published in 2012 sold the most units (769,084).
     - Because the dataset ends at 2016, this would suggest that newer titles seem to do better commercially than older titles. The earliest year in the Top 20 of highest-selling years is 1985 with 219,561 total sales.
 #### Reader Satisfaction
-- In order to get a general understanding, I grouped the ratings into rating_groups based on the closest integer rather than doing the analysis with ratings that could range with such a vast number of decimals.
+- In order to get a general understanding, as seen in the code block below, I grouped the ratings into rating_groups based on the closest integer rather than doing the analysis with ratings that could range with such a vast number of decimals. By doing this, I found that books with ratings around 3 (out of 5) sold the most books overall.
 ```SQL
 SELECT
     FLOOR(book_average_rating) AS rating_group
@@ -65,8 +111,8 @@ GROUP BY
     rating_group
 ORDER BY
     avg_units_sold DESC
-``` 
-- Doing this, I found that books with ratings around 3 (out of 5) sold the most books overall.
+```
+*SQL code to create the rating groups.*
 -  Over 97% of books in the dataset received more than 50,000 ratings and averaged 9,717 units sold.
     - This suggests a close relationship between reader engagement and commercial visibility.
 - Penguin Group (USA) LLC achieved the highest average rating at 4.05.
@@ -74,7 +120,15 @@ ORDER BY
 - Harper Lee's *Go Set a Watchman* generated the highest gross sales despite receiving a relatively modest rating of 3.31. In contrast, Brandon Sanderson's *Words of Radiance* achieved the highest rating in the dataset (4.77) but generated comparatively low sales.
     - This indicates that factors beyond reader satisfaction, like maybe author recognition or market exposure, play significant roles in commercial performance.
 #### Revenue Concentration and Investment Opportunities
-- The top 10% of titles generated 64.66% of total publisher revenue which suggests the industry is highly dependent on a relatively small number of bestseller books.
+- As seen below, the top 10% of titles generated 64.66% of total publisher revenue which suggests the industry is highly dependent on a relatively small number of bestseller books.
+
+<p align="center">
+  <img src="dashboard_images\revenue_concentration.png" />
+</p>
+<p align="center">
+  <i>Visualization showing the top 10% of books' market share.</i>
+</p>
+
 - Penguin Group (USA) LLC achieved both the highest average rating and the highest total revenue, making the company one of the strongest investment candidates.
 - Despite generating the second-lowest total revenue, Simon and Schuster Digital Sales Inc. achieved the second-highest average rating at 4.04.
 #### Pricing Strategy

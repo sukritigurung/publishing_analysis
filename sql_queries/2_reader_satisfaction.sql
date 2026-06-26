@@ -61,10 +61,6 @@ ORDER BY
     avg_book_rating DESC
 ;
 
-SELECT * FROM books_data_view ORDER BY gross_sales DESC;
-SELECT * FROM books_data_view ORDER BY book_average_rating DESC;
-SELECT * from books_data_view where book_name = 'Words of Radiance'
-
 -- Are reader ratings and commercial success closely aligned?
 SELECT -- for top selling books
 	book_name
