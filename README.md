@@ -1,4 +1,5 @@
-# Background
+# Publishing Industry Market Analysis
+## Background
 Honeybee Group is an investment firm looking to invest in the publishing industry. The company is seeking to better understand what publisher would yield the best returns based on commercial performance and customer satisfaction.
 
 The SQL queries used for this analysis along with detailed comments and result sets can be found [here](/sql_queries/).
@@ -21,7 +22,7 @@ The tools I used for this project are:
 - Visual Studio Code
 - Tableau
 - Git and GitHub
-# Data Structure and Initial Checks
+## Data Structure and Initial Checks
 This project was conducted using Josh Murrey's Book Sales and Ratings Data from Kaggle which can be found [here](https://www.kaggle.com/datasets/thedevastator/books-sales-and-ratings/data).
 
 The dataset features attributes like sales and ratings from nine different publishers with publishing years ranging from mostly the 1600s to 2016, with a handful of books from before the common era (BCE).
@@ -72,7 +73,7 @@ CREATE VIEW books_data_view AS
 		books_data_clean
 ;
 ```
-# Executive Summary
+## Executive Summary
 <p align="center">
     <img src="dashboard_images\overview_summary.png"/>
 </p>
@@ -80,6 +81,7 @@ CREATE VIEW books_data_view AS
   <i>Overview of main metrics.</i>
 </p>
 After evaluating the data, Honeybee Group found Penguin Group (USA) LLC to be both the highest-revenue publisher and one of the strongest performers in reader ratings. Revenue appears heavily concentrated among a relatively small percentage of bestselling titles. While higher-priced books generally generated more revenue per title, sales volume remains critical in publisher success.
+
 ### Overview of Findings
 #### Commercial Performance
 - Penguin Group (USA) LLC generated the highest total revenue, producing $213,817.45 in publisher revenue.
@@ -136,7 +138,7 @@ ORDER BY
 - Books priced between $5 and $10 sold the most copies on average (11,550 units) while books priced above $20 sold the fewest (3,231). This suggests that higher prices do not necessarily lead to higher sales volume and that demand may decline as prices increase.
 - Hachette and Penguin generated the hghest average revenue per title while maintaining moderate average prices. Amazon generated lower revenue per title despite selling large volumes of books.
 - Mid-priced books ($5-$20) generated the majority of industry revenue while also maintaining strong sales volume. On the other hand, extremely low-priced books sold reasonably well but generated substantially less revenue per title. Moderate pricing may provide the most sustainable commercial results.
-# Recommendations
+## Recommendations
 Based on the insights, the following recommendations have been provided:
 - Penguin Group (USA) LLC, Simon and Schuster Digital Sales Inc., and Hachette Book Group are the strongest contenders for investment.
     - Penguin demonstrated both strong commercial performance and strong reader satisfaction which would make it a great priority investment.
@@ -144,7 +146,7 @@ Based on the insights, the following recommendations have been provided:
     - Hachette Book Group generated the highest average revenue per title, indicating a strong ability to monetize releases.
 - Further evaluate publisher dependence on bestseller titles before making any investment decisions.
     - With the top ten percent of books generating more than half of the industry revenue, it's vital to understand whether this could pose any portfolio risk, especially in investing in companies that don't house a good share of the top books.
-# Assumptions and Caveats
+## Assumptions and Caveats
 Throughout the analysis, multiple assumptions were made to manage challenges with the data. These assumptions and caveats are noted below:
 - 'fiction' and 'genre fiction' under book_genre were treated as the same category due to the apparent overlap in classification. Similarly, 'HarperCollins Publisher', 'HarperCollins Publishing' and 'HarperCollins Christian Publishing' under publisher_name were treated as the same.
     - Relevant note for clarification: 'Penguin Group (USA) LLC' and 'Random House LLC' under publisher_name were two separate publishers that merged to form Penguin Random House in 2013. Initially, I was going to treat the two the same under 'Penguin Random House.' However, there were books published under them before the merger in the dataset, so I decided to leave them as separate companies. It's then important to note that because the dataset goes till 2016, there might be some titles from *after* the merger which could affect the analyses.
