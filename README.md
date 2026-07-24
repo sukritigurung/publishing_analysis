@@ -16,12 +16,13 @@ Insights and recommendations are provided on the following key areas:
 - **Pricing strategy:** An analysis of what commercial strategies can be most effective.
     - Do higher priced books generate more revenue? Do higher priced books sell more copies? Are publishers generating more revenue through higher prices or higher sales volume?
 ### Tools Used
-The tools I used for this project are:
-- SQL
-- PostgreSQL
-- Visual Studio Code
-- Tableau
-- Git and GitHub
+The tools used for this project were:
+- SQL - data querying
+- PostgreSQL - data storage and management
+- pgAdmin - workspace for initial SQL code editing
+- Visual Studio Code - SQL code editor for easier version control
+- Tableau Public - data visualization
+- Git and GitHub - version control and documentation
 ## Data Structure and Initial Checks
 This project was conducted using Josh Murrey's Book Sales and Ratings Data from Kaggle which can be found [here](https://www.kaggle.com/datasets/thedevastator/books-sales-and-ratings/data).
 
